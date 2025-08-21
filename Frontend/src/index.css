@@ -1,0 +1,884 @@
+:root{
+.btn-duo{ background:var(--duo-green); border:none; color:#fff; font-weight:700; border-radius:14px; padding:10px 16px; }
+.btn-duo:hover{ filter:brightness(0.95) }
+.btn-ghost{ background:#fff; border:1px solid #e5eaf1; color:#333; border-radius:14px; font-weight:600 }
+}
+
+
+
+
+body{
+  font-family: 'Poppins', sans-serif;
+  
+}
+
+/* Hint chips */
+.hint-chip{ background:#f2f7ff; border:1px dashed #cfe2ff; color:#2f6bff; padding:6px 10px; border-radius:12px; font-size:13px; }
+
+
+/* Lives hearts */
+.heart{ width:26px; height:26px; display:inline-block; margin:0 2px; position:relative; transform: rotate(-45deg); }
+.heart:before,.heart:after{ content:""; position:absolute; width:26px; height:26px; background:#ff4d6d; border-radius:50%; }
+.heart:before{ top:-13px; left:0 }
+.heart:after{ top:0; left:13px }
+.heart.empty:before,.heart.empty:after{ background:#ffd1db }
+
+
+/* Chest animation */
+.chest { width:140px; height:110px; margin:auto; position:relative; cursor:pointer; }
+.chest-box { width:100%; height:100%; background: linear-gradient(180deg,#b87333,#8b4b19); border:3px solid #5a2b0c; border-radius:12px; box-shadow: inset 0 6px 0 rgba(255,255,255,.2); }
+.chest-lid { position:absolute; top:-6px; left:0; right:0; height:40px; background: linear-gradient(180deg,#d4943c,#a8601e); border:3px solid #5a2b0c; border-radius:12px 12px 8px 8px; transform-origin: center left; transform: rotate(0deg); transition: transform .5s ease; }
+.chest.open .chest-lid{ transform: rotate(-35deg); }
+.sparkle{ position:absolute; top:-8px; left:50%; transform:translateX(-50%); opacity:0; animation: sparkle 1.2s ease forwards; }
+@keyframes sparkle{ 0%{ transform: translateX(-50%) translateY(10px) scale(.6); opacity:0 }
+50%{ opacity:1 }
+100%{ transform: translateX(-50%) translateY(-30px) scale(1.1); opacity:0 } }
+
+
+/* XP pulse */
+.pulse{ animation:pulse 1.2s ease }
+@keyframes pulse{ 0%{ box-shadow:0 0 0 0 rgba(88,204,2,.5)} 70%{ box-shadow:0 0 0 12px rgba(88,204,2,0) } 100%{ box-shadow:0 0 0 0 rgba(88,204,2,0) } }
+
+
+/* Leaderboard styles */
+.badge-division{ border-radius:999px; padding:4px 10px; font-weight:700; color:#fff }
+.badge-Bronze{ background:#cd7f32 }
+.badge-Silver{ background:#c0c0c0; color:#222 }
+.badge-Gold{ background:#ffd700; color:#222 }
+.badge-Diamond{ background:#3dd5f3 }
+.badge-Champions{ background:#7c4dff }
+
+
+/* Input styling */
+.answer-input{ border-radius:12px; border:1px solid #e6eaf0; padding:12px 14px; }
+
+
+/* Small helper */
+.text-shadow-soft{ 
+  text-shadow:0 2px 8px rgba(0,0,0,.08)
+} 
+
+
+/* ---- HOME: hero & tiles ---- */
+.duo-hero {
+  background: linear-gradient(135deg, rgba(88,204,2,.09), rgba(28,176,246,.08)) , #fff;
+  border: 1px solid #e9eef6;
+}
+.kpi-card{
+  background: #fff;
+  border: 1px solid #eef1f5;
+  border-radius: 16px;
+  padding: 14px;
+}
+.duo-badge-hero{
+  display:inline-grid; place-items:center;
+  width:36px; height:36px; border-radius:12px;
+  background:#fff; border:1px solid #e8eef6;
+  box-shadow:0 6px 20px rgba(0,0,0,.06);
+}
+
+/* CTA tiles */
+.cta-tile{
+  display:block; background:#fff; border:1px solid #eef1f5; border-radius:18px; padding:16px;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.cta-tile:hover{ transform: translateY(-3px); box-shadow:0 12px 26px rgba(0,0,0,.06) }
+.cta-emoji{ font-size:28px; }
+.cta-title{ font-weight:800; margin-top:6px; }
+.cta-sub{ color:#6b7786; font-size:13px; }
+
+/* Daily quests */
+.quest-item{
+  background:#fff; border:1px solid #eef1f5; border-radius:14px; padding:10px 12px;
+}
+.quest-item.done{ opacity:.75 }
+.quest-dot{
+  width:10px; height:10px; border-radius:50%;
+  display:inline-block;
+}
+
+/* Mini chest */
+.chest-mini{
+  font-size:28px; filter: drop-shadow(0 6px 10px rgba(0,0,0,.08));
+}
+
+/* Tips */
+.tip-tile{
+  background:#fff; border:1px dashed #d6e2f2; border-radius:16px; padding:14px;
+}
+.tip-emoji{ font-size:26px; }
+
+/* ---- Animations & effects ---- */
+.glow{ box-shadow: 0 8px 30px rgba(28,176,246,.08), inset 0 0 0 1px rgba(255,255,255,.6); }
+.hover-rise{ transition: transform .15s ease, box-shadow .15s ease; }
+.hover-rise:hover{ transform: translateY(-4px); box-shadow:0 14px 30px rgba(0,0,0,.08) }
+.wiggle{ animation: wiggle 1.2s ease-in-out infinite; }
+@keyframes wiggle{ 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-2px) } }
+.float-up{ animation: floatUp 2.3s ease-in-out infinite; }
+@keyframes floatUp{ 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-5px) } }
+
+/* subtle moving background */
+.move-bg{
+  background-size: 200% 200%;
+  animation: moveBg 14s ease infinite;
+}
+@keyframes moveBg{
+  0%{ background-position: 0% 0% }
+  50%{ background-position: 100% 50% }
+  100%{ background-position: 0% 100% }
+}
+
+/* shimmer line for tips */
+.shimmer{
+  position: relative;
+  overflow: hidden;
+}
+.shimmer::after{
+  content:"";
+  position:absolute; top:0; left:-150px; width:120px; height:100%;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.5) 50%, rgba(255,255,255,0) 100%);
+  animation: shimmer 2.2s infinite;
+}
+@keyframes shimmer{ 0%{ left:-150px } 100%{ left: 120% } }
+
+/* soft shadow */
+.soft-shadow{ box-shadow: 0 10px 30px rgba(0,0,0,.06) }
+
+
+
+
+
+/* ---- Neo hero look ---- */
+.neo-hero{
+  background: linear-gradient(135deg, rgba(124,77,255,.06), rgba(28,176,246,.06)), #fff;
+  border: 1px solid #e9eef6; border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.06), inset 0 0 0 1px rgba(255,255,255,.7);
+}
+.hero-icon{
+  width:56px; height:56px; display:grid; place-items:center; border-radius:16px;
+  background:#fff; border:1px solid #e8eef6; font-size:26px;
+  box-shadow:0 8px 22px rgba(0,0,0,.06);
+}
+.hero-chest{ font-size:30px; filter: drop-shadow(0 6px 10px rgba(0,0,0,.08)); }
+
+/* KPIs */
+.kpi{ background:#fff; border:1px solid #eef1f5; border-radius:16px; padding:14px; }
+.kpi.neon{ box-shadow:0 0 0 2px rgba(88,204,2,.08) inset; }
+.kpi-value{ font-size:34px; line-height:1; font-weight:800; }
+
+/* Tiles */
+.tile{
+  display:flex; gap:12px; align-items:center;
+  background:#fff; border:1px solid #eef1f5; border-radius:18px; padding:14px;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.tile:hover{ transform: translateY(-4px); box-shadow: 0 14px 30px rgba(0,0,0,.08); }
+.tile-icon{
+  width:44px; height:44px; border-radius:12px; display:grid; place-items:center; color:#fff; font-size:20px;
+}
+.gradient-green{ background: linear-gradient(135deg, #58CC02, #3aa501); }
+.gradient-sky{ background: linear-gradient(135deg, #1cb0f6, #149ad6); }
+.gradient-purple{ background: linear-gradient(135deg, #7c4dff, #5e35b1); }
+.gradient-gold{ background: linear-gradient(135deg, #ffd43b, #f1b800); color:#222; }
+
+/* Quests */
+.quest{
+  background:#fff; border:1px solid #eef1f5; border-radius:14px; padding:10px 12px;
+}
+.quest.done{ opacity:.8 }
+.quest-icon{ width:32px; height:32px; border-radius:10px; display:grid; place-items:center; background:#f4f7fb; font-size:14px; }
+.quest-icon.ok{ background:#e9fbe9; color:#1a531b; }
+
+/* Tips */
+.tip{ background:#fff; border:1px dashed #d6e2f2; border-radius:16px; padding:14px; }
+.tip-icon{ font-size:22px; }
+
+/* Motion */
+.wobble{ animation: wobble 1.8s ease-in-out infinite; }
+@keyframes wobble{ 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-2px) } }
+.pulse-rare{ animation: pulseRare 2.2s ease-in-out infinite; }
+@keyframes pulseRare{ 0%{ transform: scale(1) } 50%{ transform: scale(1.05) } 100%{ transform: scale(1) } }
+
+/* Moving gradient background */
+.move-bg{
+  background-size: 180% 180%;
+  animation: moveBg 16s ease infinite;
+}
+@keyframes moveBg{ 0%{ background-position: 0% 0% } 50%{ background-position: 100% 50% } 100%{ background-position: 0% 100% } }
+
+/* Shimmer */
+.shimmer{ position:relative; overflow:hidden; }
+.shimmer::after{
+  content:""; position:absolute; top:0; left:-150px; width:120px; height:100%;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.5) 50%, rgba(255,255,255,0) 100%);
+  animation: shimmer 2.2s infinite;
+}
+@keyframes shimmer{ 0%{ left:-150px } 100%{ left:120% } }
+
+/* Fonts */
+.fw-800{ font-weight:800; }
+
+
+
+/* Perfil */
+.profile-card{ border-radius:20px; }
+.avatar{
+  width:72px; height:72px; display:grid; place-items:center; border-radius:18px;
+  background:#fff; border:1px solid #e8eef6; font-size:44px; color:#6c757d;
+  box-shadow:0 10px 26px rgba(0,0,0,.06);
+}
+.kpi-badge{ font-weight:700; border-radius:999px; padding:6px 10px; }
+.division-badge{ color:#fff; }
+.division-Bronze{ background:#cd7f32 }
+.division-Silver{ background:#c0c0c0; color:#222 }
+.division-Gold{ background:#ffd700; color:#222 }
+.division-Diamond{ background:#3dd5f3 }
+.division-Champions{ background:#7c4dff }
+
+.bio-box{
+  background:#fff; border:1px solid #eef1f5; border-radius:14px; padding:12px;
+}
+
+.stat-card{
+  background:#fff; border:1px solid #eef1f5; border-radius:16px; padding:14px;
+}
+.stat-val{ font-size:28px; font-weight:800; line-height:1 }
+
+.duo-subcard{
+  background: #fbfcff; border:1px dashed #dbe6f7; border-radius:16px; padding:14px;
+}
+
+/* Modo por juego */
+.mode-card{
+  display:flex; align-items:center; gap:10px;
+  background:#fff; border:1px solid #eef1f5; border-radius:14px; padding:10px 12px;
+}
+.mode-icon{
+  width:38px; height:38px; border-radius:12px; display:grid; place-items:center; color:#fff; font-size:18px;
+}
+.mode-icon.persona{ background: linear-gradient(135deg,#58CC02,#3aa501) }
+.mode-icon.animal{ background: linear-gradient(135deg,#1cb0f6,#149ad6) }
+.mode-icon.cosa{ background: linear-gradient(135deg,#7c4dff,#5e35b1) }
+
+/* Logros */
+.achievement{ background:#f2f7ff; color:#2f6bff; border-radius:999px; padding:6px 10px; }
+.achievement.ok{ background:#e9fbe9; color:#165c19; border:1px solid #bce3c1; }
+
+
+
+
+
+/* —— Profile Pro —— */
+.profile-card { border-radius: 20px; }
+.avatar{
+  width:90px; height:90px; position:relative; border-radius:20px;
+  background:#fff; border:1px solid #e8eef6; display:grid; place-items:center;
+  box-shadow:0 10px 26px rgba(0,0,0,.06);
+}
+.avatar img.avatar-img{ width:100%; height:100%; object-fit:cover; border-radius:20px; }
+.avatar .avatar-placeholder{ font-size:64px; color:#6c757d; }
+.avatar.verified{ box-shadow:0 0 0 3px rgba(25,135,84,.2); }
+.verify-badge{
+  position:absolute; bottom:-6px; right:-6px;
+  background:#fff; border:1px solid #e8eef6; border-radius:999px; padding:4px; color:#198754;
+  display:grid; place-items:center;
+}
+.name-input{ max-width:240px }
+.email-input{ max-width:260px }
+.bio-input{ max-width:560px }
+
+.duo-subcard{
+  background: #fbfcff; border:1px dashed #dbe6f7; border-radius:16px; padding:14px;
+}
+
+.stat-card{
+  background:#fff; border:1px solid #eef1f5; border-radius:16px; padding:14px;
+}
+.stat-val{ font-size:28px; font-weight:800; line-height:1 }
+
+.mode-card{
+  display:flex; align-items:center; gap:10px;
+  background:#fff; border:1px solid #eef1f5; border-radius:14px; padding:10px 12px;
+}
+.mode-icon{
+  width:38px; height:38px; border-radius:12px; display:grid; place-items:center; color:#fff; font-size:18px;
+}
+.mode-icon.persona{ background: linear-gradient(135deg,#58CC02,#3aa501) }
+.mode-icon.animal{ background: linear-gradient(135deg,#1cb0f6,#149ad6) }
+.mode-icon.cosa{ background: linear-gradient(135deg,#7c4dff,#5e35b1) }
+
+.mini-stat{ background:#fff; border:1px solid #eef1f5; border-radius:12px; padding:10px 12px; }
+
+/* Achievements */
+.achievement{ background:#f2f7ff; color:#2f6bff; border-radius:999px; padding:6px 10px; }
+.achievement.ok{ background:#e9fbe9; color:#165c19; border:1px solid #bce3c1; }
+
+/* División plate */
+.division-card{ border:1px solid #eef1f5; border-radius:18px; }
+.division-plate{
+  min-width:140px; text-align:center; font-weight:900; letter-spacing:0.5px;
+  padding:10px 12px; border-radius:14px; color:#fff; text-transform:uppercase;
+  box-shadow:0 12px 26px rgba(0,0,0,.08);
+}
+.plate-Bronze{ background:#cd7f32 }
+.plate-Silver{ background:#c0c0c0; color:#222; }
+.plate-Gold{ background:#ffd700; color:#222; }
+.plate-Diamond{ background:#3dd5f3 }
+.plate-Champions{ background:#7c4dff }
+
+
+
+
+
+
+
+
+/* Panel de división mejorado */
+.division-card { border:1px solid #eef1f5; border-radius:18px; }
+.division-plate{
+  min-width:150px; text-align:center; font-weight:900; letter-spacing:0.5px;
+  padding:12px 14px; border-radius:14px; color:#fff; text-transform:uppercase;
+  box-shadow:0 12px 26px rgba(0,0,0,.08);
+}
+.plate-Bronze{ background:#cd7f32 }
+.plate-Silver{ background:#c0c0c0; color:#222; }
+.plate-Gold{ background:#ffd700; color:#222; }
+.plate-Diamond{ background:#3dd5f3 }
+.plate-Champions{ background:#7c4dff }
+
+/* KPIs compactas dentro de la división */
+.division-kpi{
+  display:flex; align-items:center; gap:12px;
+  background:#fff; border:1px solid #eef1f5; border-radius:14px; padding:12px;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.division-kpi:hover{ transform: translateY(-3px); box-shadow:0 12px 24px rgba(0,0,0,.06) }
+.kpi-icon{
+  width:42px; height:42px; border-radius:12px; display:grid; place-items:center; color:#fff; font-size:18px;
+}
+.kpi-icon.xp{ background: linear-gradient(135deg,#7c4dff,#5e35b1) }
+.kpi-icon.coin{ background: linear-gradient(135deg,#ffd43b,#f1b800); color:#222; }
+.kpi-icon.gem{ background: linear-gradient(135deg,#1cb0f6,#149ad6) }
+.kpi-label{ font-size:12px; color:#6c7a89; }
+.kpi-value{ font-weight:800; font-size:20px; line-height:1 }
+
+
+
+
+
+
+/* ===== Social/Profile ===== */
+.profile-head{ border-radius:20px; }
+.right-panel{ position: sticky; top: 16px; }
+
+.user-avatar{ box-shadow:0 10px 26px rgba(0,0,0,.06); }
+
+/* Modal custom (sin JS de Bootstrap) */
+.modal-backdrop-custom{
+  position: fixed; inset:0; background: rgba(20,25,34,.45);
+  display:grid; place-items:center; z-index:1050;
+}
+.modal-card-custom{
+  background:#fff; border:1px solid #e9eef6; border-radius:16px; padding:16px;
+  width:min(560px, 92%); max-height:80vh; overflow:auto;
+  box-shadow:0 18px 40px rgba(0,0,0,.2);
+}
+
+/* Right panel card spacing */
+.right-panel .duo-card{ position:relative; }
+
+/* Buttons ghost (si no lo tenías) */
+.btn-ghost{
+  background:#fff; border:1px solid #e8eef6;
+}
+.btn-ghost:hover{ background:#f8fafc; }
+
+/* duo-card base (por si no está) */
+.duo-card{
+  background:#fff; border:1px solid #eef1f5; border-radius:18px; padding:16px;
+}
+
+/* Sugerencias */
+.right-panel .list-group-item,
+.modal-card-custom .list-group-item{ border:none; border-bottom:1px solid #f1f4f9; }
+
+
+
+/* Cards base */
+.duo-card{ background:#fff; border:1px solid #eef1f5; border-radius:18px; padding:16px; }
+
+/* Modal */
+.modal-backdrop-custom{ position:fixed; inset:0; background:rgba(20,25,34,.45); display:grid; place-items:center; z-index:1050; }
+.modal-card-custom{ background:#fff; border:1px solid #e9eef6; border-radius:16px; padding:16px; width:min(560px,92%); max-height:80vh; overflow:auto; box-shadow:0 18px 40px rgba(0,0,0,.2); }
+
+/* Stats */
+.stat-card{ background:#fff; border:1px solid #eef1f5; border-radius:16px; padding:14px; }
+.stat-val{ font-size:28px; font-weight:800; line-height:1; }
+
+/* Achievements grid */
+.ach-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(120px,1fr)); gap:10px; }
+.ach-item{ background:#f7faff; border:1px solid #e9eef6; border-radius:12px; padding:10px; text-align:center; color:#6c7a89; }
+.ach-item.ok{ background:#e9fbe9; border-color:#b9e4be; color:#165c19; }
+.ach-icon{ font-size:24px; margin-bottom:6px; }
+.ach-title{ font-size:12px; font-weight:700; }
+
+/* Right panel */
+.right-panel{ position:sticky; top:16px; }
+
+/* Ghost btn */
+.btn-ghost{ background:#fff; border:1px solid #e8eef6; }
+.btn-ghost:hover{ background:#f8fafc; }
+
+/* Mini meta */
+.mini-meta{ font-size:11px; }
+
+
+
+
+
+/* ===== Tarjetas generales ===== */
+.duo-card {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.duo-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+/* Neo Hero */
+.neo-hero {
+  background: linear-gradient(135deg, #f9f9ff, #f0f4ff);
+  border: 2px solid #e0e4ff;
+}
+
+/* ===== Hero ===== */
+.hero-icon {
+  font-size: 3rem;
+  color: #5c6bc0;
+}
+
+/* ===== KPI ===== */
+.kpi {
+  background: #f9fafb;
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+.kpi.neon {
+  background: #eef9f1;
+  border: 1px solid #b6e7c3;
+}
+.kpi-value {
+  font-size: 1.75rem;
+  font-weight: bold;
+}
+
+/* ===== Progress ===== */
+.progress {
+  background: #e9ecef;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #00c853, #64dd17);
+  transition: width 0.3s ease;
+}
+
+/* ===== Botones ===== */
+.btn-duo {
+  background: #ffd54f;
+  color: #000;
+  border-radius: 999px;
+  padding: 0.4rem 1rem;
+  font-weight: 600;
+  border: none;
+  transition: transform 0.15s ease;
+}
+.btn-duo:hover {
+  transform: scale(1.05);
+  background: #ffca28;
+}
+.btn-ghost {
+  background: transparent;
+  border: 1px solid #ccc;
+  border-radius: 999px;
+  padding: 0.4rem 1rem;
+}
+.btn-ghost:hover {
+  background: #f9f9f9;
+}
+
+/* ===== Quest List ===== */
+.quest {
+  background: #fafafa;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #eee;
+  transition: background 0.2s ease;
+}
+.quest.done {
+  background: #e8f5e9;
+  border-color: #c8e6c9;
+}
+.quest-icon {
+  font-size: 1.5rem;
+  color: #bbb;
+}
+.quest-icon.ok {
+  color: #43a047;
+}
+
+/* ===== Tiles (Entrenamiento rápido) ===== */
+.tile {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #fff;
+  border-radius: 0.75rem;
+  padding: 0.9rem 1.1rem;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.tile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+.tile-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+.gradient-green { background: linear-gradient(135deg, #00c853, #64dd17); }
+.gradient-sky   { background: linear-gradient(135deg, #29b6f6, #0288d1); }
+.gradient-purple{ background: linear-gradient(135deg, #7e57c2, #5e35b1); }
+.gradient-gold  { background: linear-gradient(135deg, #ffca28, #ffb300); }
+.tile-title {
+  font-weight: 600;
+}
+.tile-sub {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* ===== Tips / Consejos ===== */
+.tip {
+  background: #f9f9ff;
+  border: 1px solid #e0e0ff;
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+.tip-icon {
+  font-size: 1.5rem;
+}
+.shimmer {
+  background: linear-gradient(
+    110deg,
+    #f9f9ff 8%,
+    #ececff 18%,
+    #f9f9ff 33%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer {
+  to { background-position: -200% 0; }
+}
+
+/* ===== Otros ===== */
+.badge {
+  font-size: 0.75rem;
+  border-radius: 999px;
+  padding: 0.3em 0.6em;
+}
+
+
+.mini-confetti{
+  position: fixed;
+  top: 50%;
+  width: 8px; height: 8px; background: hsl(var(--h,200) 90% 55%);
+  border-radius: 2px; transform: translate(-50%, -50%);
+  animation: confetti-pop 1.2s ease forwards;
+}
+.mini-confetti:nth-child(3n){ --h: 140 }
+.mini-confetti:nth-child(4n){ --h: 40 }
+@keyframes confetti-pop{
+  to{
+    transform: translate(var(--tx), var(--ty)) rotate(var(--rot));
+    opacity: 0;
+  }
+}
+
+
+
+
+
+
+/* pistas */
+.hint-chip{ background:#eef7ff; border:1px solid #d6eaff; border-radius:12px; padding:4px 8px; }
+
+/* hearts */
+.heart{ filter: grayscale(1) opacity(.35); font-size:18px; }
+.heart.full{ filter: none; opacity:1; }
+
+/* memory cards */
+.card.memory{ position:relative; aspect-ratio:1/1; border:0; background:transparent; perspective:700px; }
+.card.memory .front,.card.memory .back{
+  position:absolute; inset:0; border-radius:12px; display:grid; place-items:center;
+  font-size:28px; transition: transform .4s, opacity .2s;
+  backface-visibility: hidden;
+}
+.card.memory .front{ background:#f0f3f7; border:1px solid #e1e6ef; }
+.card.memory .back{ background:white; border:1px solid #e1e6ef; transform: rotateY(180deg); }
+.card.memory.open .front{ transform: rotateY(180deg); }
+.card.memory.open .back{ transform: rotateY(0deg); }
+.card.memory.done{ outline:2px solid #22c55e; }
+
+/* stage fade */
+.fade-in{ animation: fadeIn .35s ease both; }
+@keyframes fadeIn{ from{ opacity:0; transform: translateY(6px); } to{ opacity:1; transform:none; } }
+
+
+
+
+
+
+
+
+
+/* src/styles/duo.css */
+
+/* ====== Reset/base peque ====== */
+:root{
+  --duo-green:#58cc02;
+  --duo-green-600:#2a8f00;
+  --duo-bg:#f6f7fb;
+  --duo-card:#ffffff;
+  --duo-border:#e8ecf3;
+  --duo-muted:#6c7a89;
+}
+html,body,#root{ height:100%; background:var(--duo-bg); }
+.fw-800{ font-weight:800; }
+
+/* ====== Cards estilo Duolingo ====== */
+.duo-card{
+  background:var(--duo-card);
+  border:1px solid var(--duo-border);
+  border-radius:16px;
+  padding:16px;
+  box-shadow:0 4px 14px rgba(15,23,42,.04);
+}
+.soft-shadow{ box-shadow:0 10px 30px rgba(0,0,0,.06); }
+
+/* ====== Hero ====== */
+.neo-hero{
+  background:linear-gradient(135deg,#fafdff 0%, #ffffff 60%), var(--duo-card);
+  position:relative; overflow:hidden;
+}
+.hero-icon{
+  width:56px; height:56px; display:grid; place-items:center;
+  border-radius:14px; background:#eaf8e5; color:var(--duo-green);
+  font-size:26px;
+}
+
+/* Fondo sutil animado */
+.move-bg::after{
+  content:""; position:absolute; inset:-20%;
+  background:
+    radial-gradient(600px 400px at 20% 10%, rgba(88,204,2,.08), transparent 60%),
+    radial-gradient(600px 400px at 80% 90%, rgba(0,180,255,.07), transparent 60%),
+    radial-gradient(400px 260px at 50% 40%, rgba(255,215,0,.06), transparent 60%);
+  animation: drift 18s linear infinite;
+  pointer-events:none;
+}
+@keyframes drift{ to{ transform: translate3d(2%, -2%, 0); } }
+
+/* ====== Botones ====== */
+.btn-duo{
+  background:var(--duo-green);
+  border:1px solid var(--duo-green-600);
+  color:#0b1f06;
+  font-weight:700;
+}
+.btn-duo:hover{ filter: brightness(.95); }
+
+/* ====== KPI ====== */
+.kpi{
+  background:#fbfcff; border:1px solid var(--duo-border);
+  border-radius:14px; padding:12px;
+}
+.kpi.neon{ box-shadow: 0 0 0 3px rgba(88,204,2,.12) inset; }
+.kpi-value{ font-size:28px; font-weight:800; }
+
+/* ====== Tiles (entrenamiento) ====== */
+.tile{
+  display:flex; align-items:center; gap:12px;
+  background:#fff; border:1px solid var(--duo-border);
+  border-radius:14px; padding:12px;
+}
+.tile-icon{
+  width:48px; height:48px; border-radius:12px; display:grid; place-items:center; font-size:22px; color:#0b1f06;
+}
+.hover-rise{ transition: transform .15s ease, box-shadow .15s ease; }
+.hover-rise:hover{ transform: translateY(-2px); box-shadow:0 8px 26px rgba(0,0,0,.08); }
+
+.gradient-green{ background:linear-gradient(140deg,#d7ffcb,#9eff8c); }
+.gradient-sky{ background:linear-gradient(140deg,#cceaff,#99d5ff); }
+.gradient-purple{ background:linear-gradient(140deg,#ecd7ff,#c9a5ff); }
+.gradient-gold{ background:linear-gradient(140deg,#ffeab5,#ffd36a); }
+
+.wobble{ animation: wobble .9s ease both; }
+@keyframes wobble{
+  0%{ transform: translateY(0) rotate(0); } 
+  33%{ transform: translateY(-2px) rotate(-.6deg); }
+  66%{ transform: translateY(1px) rotate(.6deg); }
+  100%{ transform: translateY(0) rotate(0); }
+}
+
+/* ====== Chips / pistas ====== */
+.hint-chip{
+  background:#eef7ff; border:1px solid #d6eaff; color:#0c3c57;
+  border-radius:12px; padding:4px 10px; font-weight:600;
+}
+
+/* ====== Inputs juego ====== */
+.answer-input{
+  border-radius:12px;
+  border:1px solid var(--duo-border);
+  padding:10px 12px;
+}
+
+/* ====== Hearts vidas ====== */
+.heart{ filter: grayscale(1) opacity(.35); font-size:18px; }
+.heart.full{ filter:none; opacity:1; }
+
+/* ====== Animaciones ====== */
+.fade-in{ animation: fadeIn .35s ease both; }
+@keyframes fadeIn{ from{ opacity:0; transform: translateY(6px);} to{ opacity:1; transform:none; } }
+.pulse{ animation: pulse .9s ease-in-out; }
+@keyframes pulse{ 0%{ transform: scale(.98);} 50%{ transform: scale(1.01);} 100%{ transform: scale(1);} }
+
+/* ====== Confeti ====== */
+.mini-confetti{
+  position: fixed; top: 50%; left:50%;
+  width: 8px; height: 8px; background: hsl(var(--h,200) 90% 55%);
+  border-radius: 2px; transform: translate(-50%, -50%);
+  animation: confetti-pop 1.2s ease forwards; z-index: 99999;
+}
+.mini-confetti:nth-child(3n){ --h: 140 }
+.mini-confetti:nth-child(4n){ --h: 40 }
+@keyframes confetti-pop{
+  to{
+    transform: translate(var(--tx), var(--ty)) rotate(var(--rot));
+    opacity: 0;
+  }
+}
+
+/* ====== Quests ====== */
+.quest{
+  background:#fff; border:1px solid var(--duo-border); border-radius:12px; padding:10px 12px;
+}
+.quest.done{ opacity:.75; }
+
+/* ====== Memory cards ====== */
+.card.memory{ position:relative; aspect-ratio:1/1; border:0; background:transparent; perspective:700px; }
+.card.memory .front,.card.memory .back{
+  position:absolute; inset:0; border-radius:12px; display:grid; place-items:center;
+  font-size:28px; transition: transform .4s, opacity .2s;
+  backface-visibility: hidden;
+}
+.card.memory .front{ background:#f0f3f7; border:1px solid #e1e6ef; }
+.card.memory .back{ background:#fff; border:1px solid #e1e6ef; transform: rotateY(180deg); }
+.card.memory.open .front{ transform: rotateY(180deg); }
+.card.memory.open .back{ transform: rotateY(0deg); }
+.card.memory.done{ outline:2px solid #22c55e; }
+
+/* ====== Modales mínimos ====== */
+.modal-backdrop-custom{
+  position:fixed; inset:0; background:rgba(0,0,0,.25);
+  display:grid; place-items:center; z-index: 9999;
+}
+.modal-card-custom{
+  background:#fff; border:1px solid var(--duo-border);
+  border-radius:16px; padding:16px; width:90%; max-width:520px;
+}
+
+/* ====== Tablas / listas ====== */
+.badge-division, .division-plate{ font-weight:800; }
+
+
+
+
+
+
+
+
+/* ===== Corazones con animaciones sutiles ===== */
+.lives-row .life{
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 1em; height: 1em;
+  line-height: 1;
+  transition: transform .12s ease, filter .12s ease, opacity .12s ease;
+  color: #ff4d6d;
+  opacity: .35;
+  filter: grayscale(1);
+}
+.lives-row .life.full{
+  opacity: 1;
+  filter: none;
+}
+.lives-row .life.empty{
+  color: #ff9fb0;
+}
+
+/* latido al ganar */
+.lives-row .life.gain{
+  animation: heartBeat .9s ease-in-out;
+}
+@keyframes heartBeat{
+  0%{ transform: scale(.85); }
+  35%{ transform: scale(1.15); }
+  70%{ transform: scale(.95); }
+  100%{ transform: scale(1); }
+}
+
+/* shake al perder */
+.lives-row .life.lose{
+  animation: heartShake .6s ease;
+}
+@keyframes heartShake{
+  10%{ transform: translateX(-1px) rotate(-4deg); }
+  25%{ transform: translateX(2px)  rotate( 3deg); }
+  45%{ transform: translateX(-2px) rotate(-3deg); }
+  65%{ transform: translateX(1px)  rotate( 2deg); }
+  100%{ transform: translateX(0)   rotate(0); }
+}
+
+/* ping suave al regenerar */
+.lives-row .life .life-ping{
+  position: absolute;
+  width: 2.2em; height: 2.2em;
+  border-radius: 999px;
+  background: radial-gradient(closest-side, rgba(255,77,109,.22), rgba(255,77,109,0) 70%);
+  animation: lifePing .9s ease-out forwards;
+  z-index: -1;
+}
+@keyframes lifePing{
+  from{ transform: scale(.6); opacity: .8; }
+  to{ transform: scale(1.15); opacity: 0; }
+}
+
+
+
+.modal-backdrop { background: rgba(0,0,0,.6); }
