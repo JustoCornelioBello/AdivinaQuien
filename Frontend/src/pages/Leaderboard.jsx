@@ -5,7 +5,6 @@ import {
   initSocialData,
   getAllUsers,
   getMe,
-  divisions as DIVISIONS,
 } from "../services/social.js";
 import {
   FaTrophy,
@@ -13,18 +12,27 @@ import {
   FaMedal,
   FaGem,
   FaStar,
-  FaArrowDown,
   FaClock,
 } from "react-icons/fa";
 import "./leaderboard.css";
 
-// Mapeo de íconos por división (solo trofeos)
+/* ---------------- Divisiones (todos comienzan en Bronze) ---------------- */
+export const DIVISIONS = [
+  { name: "Bronze", min: 0 },
+  { name: "Silver", min: 800 },
+  { name: "Gold", min: 1600 },
+  { name: "Platinum", min: 2800 },
+  { name: "Diamond", min: 4200 },
+  { name: "Champions", min: 6000 },
+];
+
 const DIV_ICONS = {
-  Bronze: <FaMedal className="trophy bronze" title="Bronze" />,
-  Silver: <FaMedal className="trophy silver" title="Silver" />,
-  Gold: <FaTrophy className="trophy gold" title="Gold" />,
-  Diamond: <FaGem className="trophy diamond" title="Diamond" />,
-  Champions: <FaCrown className="trophy champions" title="Champions" />,
+  Bronze: <FaMedal className="trophy bronze" />,
+  Silver: <FaMedal className="trophy silver" />,
+  Gold: <FaTrophy className="trophy gold" />,
+  Platinum: <FaGem className="trophy platinum" />,
+  Diamond: <FaGem className="trophy diamond" />,
+  Champions: <FaCrown className="trophy champions" />,
 };
 
 function divisionFor(weeklyXp) {
@@ -65,26 +73,23 @@ function formatCountdown(ms) {
   return `${d}d ${pad(h)}:${pad(m)}:${pad(s)}`;
 }
 
-// Estrellas para el panel derecho según ranking global semanal
-function starCountForRank(rankIndex) {
-  // rankIndex es base 0
-  if (rankIndex <= 2) return 4; // Top 3 → 4 estrellas
-  if (rankIndex <= 9) return 3; // 4–10 → 3 estrellas
-  if (rankIndex <= 24) return 2; // 11–25 → 2 estrellas
-  return 1; // resto top listado
+/* ------- Snapshot de orden previo por división (para “asc/desc”) ------ */
+const SNAP_KEY = (divName) => `lb_last_order_${divName}`;
+function getLastOrder(divName) {
+  try {
+    const raw = localStorage.getItem(SNAP_KEY(divName));
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+function setLastOrder(divName, ids) {
+  try {
+    localStorage.setItem(SNAP_KEY(divName), JSON.stringify(ids));
+  } catch {}
 }
 
-function Stars({ count }) {
-  const total = 4;
-  return (
-    <div className="stars">
-      {Array.from({ length: total }).map((_, i) => (
-        <FaStar key={i} className={`star ${i < count ? "on" : ""}`} />
-      ))}
-    </div>
-  );
-}
-
+/* -------------------- Componente -------------------- */
 export default function Leaderboard() {
   const [users, setUsers] = useState([]);
   const [me, setMe] = useState(null);
@@ -93,10 +98,11 @@ export default function Leaderboard() {
 
   useEffect(() => {
     initSocialData();
-    const all = getAllUsers();
-    const cur = getMe();
+    const all = getAllUsers() || [];
+    const cur = getMe() || null;
     setUsers(all);
     setMe(cur);
+
     const myDiv = cur ? divisionFor(cur.stats.weeklyXp) : "Bronze";
     setDivTab(myDiv);
   }, []);
@@ -107,30 +113,62 @@ export default function Leaderboard() {
   }, []);
 
   const divList = useMemo(() => DIVISIONS.map((d) => d.name), []);
+  const myDivision = useMemo(
+    () => (me ? divisionFor(me.stats.weeklyXp) : "Bronze"),
+    [me]
+  );
+  const myDivIndex = useMemo(
+    () => DIVISIONS.findIndex((d) => d.name === myDivision),
+    [myDivision]
+  );
 
+  // Usuarios dentro de la división activa (orden por XP desc)
   const inThisDivision = useMemo(() => {
-    const list = users.filter((u) => inDivision(u.stats.weeklyXp, divTab));
-    return list.sort((a, b) => b.stats.weeklyXp - a.stats.weeklyXp);
+    return users
+      .filter((u) => inDivision(u.stats.weeklyXp, divTab))
+      .sort((a, b) => b.stats.weeklyXp - a.stats.weeklyXp);
   }, [users, divTab]);
 
-  // Últimos 3 de la división → descenso
-  const relegations = useMemo(() => {
-    if (inThisDivision.length <= 3) return inThisDivision;
-    return inThisDivision.slice(-3);
-  }, [inThisDivision]);
+  // Snapshot anterior y mapa de movimiento (up/down/same)
+  const lastOrder = useMemo(() => getLastOrder(divTab), [divTab]);
 
-  // Top global semanal (para panel derecho)
-  const topGlobal = useMemo(() => {
-    const list = [...users].sort((a, b) => b.stats.weeklyXp - a.stats.weeklyXp);
-    return list.slice(0, 15); // mostramos 15
-  }, [users]);
+  const movementMap = useMemo(() => {
+    if (!lastOrder || !lastOrder.length) return {};
+    const map = {};
+    inThisDivision.forEach((u, idx) => {
+      const prevIdx = lastOrder.indexOf(u.id);
+      if (prevIdx === -1) return; // sin dato previo
+      if (idx < prevIdx) map[u.id] = "up";
+      else if (idx > prevIdx) map[u.id] = "down";
+      else map[u.id] = "same";
+    });
+    return map;
+  }, [inThisDivision, lastOrder]);
 
-  // Posición del usuario dentro de la división activa
+  // Guardar snapshot de orden actual
+  useEffect(() => {
+    const ids = inThisDivision.map((u) => u.id);
+    if (ids.length) setLastOrder(divTab, ids);
+  }, [divTab, inThisDivision]);
+
+  // Mi posición en la división activa
   const myPos = useMemo(() => {
     if (!me) return null;
     const idx = inThisDivision.findIndex((u) => u.id === me.id);
     return idx >= 0 ? idx + 1 : null;
   }, [me, inThisDivision]);
+
+  // Formato XP: "111 EXP"
+  const fmtXP = (n) => `${Number(n || 0)} EXP`;
+
+  // Estado: ascendiendo/descendiendo/—
+  function renderState(u) {
+    const mv = movementMap[u.id];
+    if (mv === "up") return <span className="state-badge up">ascendiendo</span>;
+    if (mv === "down")
+      return <span className="state-badge down">descendiendo</span>;
+    return <span className="state-badge dash">—</span>;
+  }
 
   return (
     <div className="container-xxl lb2-wrap">
@@ -138,94 +176,133 @@ export default function Leaderboard() {
         {/* MAIN */}
         <div className="col-12 col-xl-8">
           {/* Header + Tabs */}
-          <div className="d-flex align-items-center justify-content-between flex-wrap gap-2">
-            <div className="d-flex align-items-center gap-2">
-              <h4 className="mb-0 text-black">Clasificación</h4>
+          <div className="d-flex align-items-center justify-content-between flex-wrap gap-2 fade-in">
+            <div className="d-flex align-items-center justify-content-between gap-2">
+              <h4 className="mb-0" style={{color:'black'}}>Clasificación</h4>
               <span className="lb2-countdown">
                 <FaClock className="me-1" />
-                Reinicio: <strong className="ms-1">{formatCountdown(countdown)}</strong> (dom)
+                Reinicio:{" "}
+                <strong className="ms-1">{formatCountdown(countdown)}</strong>{" "}
+                (dom)
               </span>
             </div>
+
+            {/* Tabs de divisiones (solo ícono; superiores transparentes y deshabilitadas) */}
             <div className="lb2-tabs">
-              {divList.map((name) => (
-                <button
-                  key={name}
-                  className={`lb2-tab ${divTab === name ? "active" : ""}`}
-                  onClick={() => setDivTab(name)}
-                  title={name}
-                >
-                  {DIV_ICONS[name] || <FaStar className="trophy" />}
-                </button>
-              ))}
+              {divList.map((name, idx) => {
+                const isLocked = idx > myDivIndex; // superiores a la mía
+                const isActive = divTab === name;
+                return (
+                  <button
+                    key={name}
+                    className={`lb2-tab ${isActive ? "active" : ""} ${
+                      isLocked ? "locked" : ""
+                    }`}
+                    onClick={() => !isLocked && setDivTab(name)}
+                    title={name}
+                    disabled={isLocked}
+                  >
+                    {DIV_ICONS[name] || <FaStar className="trophy" />}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
           {/* Header de división */}
-          <div className="duo-card lb2-header mt-2">
+          <div className="duo-card lb2-header mt-2 soft-appear">
             <div className="d-flex align-items-center gap-3">
               <div className="lb2-plate">
                 {DIV_ICONS[divTab] || <FaStar className="trophy" />}
               </div>
               <div>
-                <div className="lb2-title text-black">División seleccionada</div>
+                <div className="lb2-title">{divTab}</div>
                 <div className="lb2-muted small">
                   {inThisDivision.length} jugador(es) esta semana
                 </div>
               </div>
             </div>
             {myPos && (
-              <div className="lb2-mypos text-black">
+              <div className="lb2-mypos">
                 Tu posición: <strong>{myPos}</strong>
               </div>
             )}
           </div>
 
           {/* Tabla de la división */}
-          <div className="duo-card mt-3 ">
+          <div className="duo-card mt-3">
             {inThisDivision.length === 0 ? (
-              <div className="lb2-muted">Aún no hay jugadores en esta división.</div>
+              <div className="lb2-muted">
+                Aún no hay jugadores en esta división.
+              </div>
             ) : (
               <div className="table-responsive">
-                <table className="table align-middle lb2-table">
-                  <thead>
+                <table className="table align-middle lb2-table lb2-table-enhanced">
+                  <thead className="sticky-top">
                     <tr>
                       <th style={{ width: 64 }}>#</th>
                       <th>Usuario</th>
-                      <th className="text-end">XP semanal</th>
                       <th className="text-end" style={{ width: 160 }}>
+                        XP semanal
+                      </th>
+                      <th className="text-end" style={{ width: 180 }}>
                         Estado
                       </th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody >
                     {inThisDivision.map((u, i) => {
                       const isMe = me && u.id === me.id;
-                      const isRelegation = relegations.some((r) => r.id === u.id);
+                      const posClass =
+                        i === 0
+                          ? "gold"
+                          : i === 1
+                          ? "silver"
+                          : i === 2
+                          ? "bronze"
+                          : "";
                       return (
-                        <tr key={u.id} className={`${isMe ? "is-me" : ""}`}>
-                          <td className="pos">{i + 1}</td>
-                          <td>
-                            <Link to={`/u/${u.username}`} className="lb2-user">
-                              <span className="avatar">
+                        <tr 
+                          key={u.id}
+                          className={[
+                            "row-appear",
+                            isMe ? "is-me" : "",
+                          ].join(" ").trim()}
+                        >
+                          <td className="pos" >
+                            <span className={`pos-badge ${posClass}`} >
+                              <span className="pos-num" >{i + 1}</span>
+                            </span>
+                          </td>
+
+                          <td >
+                            <Link to={`/u/${u.username}`} className="lb2-user" >
+                              <span className="avatar" >
                                 {u.avatar ? (
                                   <img src={u.avatar} alt={u.name} />
                                 ) : (
-                                  <span className="emo">{u.emoji || "👤"}</span>
+                                  <span className="emo">
+                                    {u.emoji || "👤"}
+                                  </span>
                                 )}
                               </span>
-                              <span className="name text-truncate text-black">{u.name}</span>
+                              <span className="name text-truncate" style={{color:'black'}}>
+                                {u.name}
+                                {isMe && (
+                                  <span className="me-badge ms-2">tú</span>
+                                )}
+                              </span>
+                              <span className="username d-block small">
+                                @{u.username}
+                              </span>
                             </Link>
                           </td>
-                          <td className="text-end fw-semibold">{u.stats.weeklyXp}</td>
-                          <td className="text-end">
-                            {isRelegation ? (
-                              <span className="desc-badge">
-                                <FaArrowDown className="me-1" /> posible descenso
-                              </span>
-                            ) : (
-                              <span className="ok-badge">activo</span>
-                            )}
+
+                          <td className="text-end fw-semibold">
+                            {fmtXP(u.stats.weeklyXp)}
                           </td>
+
+                          <td className="text-end">{renderState(u)}</td>
                         </tr>
                       );
                     })}
@@ -234,69 +311,55 @@ export default function Leaderboard() {
               </div>
             )}
 
-            {/* Zona de descenso (lista clara) */}
-            {relegations.length > 0 && (
-              <div className="lb2-descenso mt-2">
-                <div className="title">
-                  <FaArrowDown className="me-2" /> Zona de descenso
-                </div>
-                <div className="list">
-                  {relegations.map((u) => (
-                    <Link key={u.id} to={`/u/${u.username}`} className="chip-red">
-                      <span className="mini-avatar">
-                        {u.avatar ? (
-                          <img src={u.avatar} alt={u.name} />
-                        ) : (
-                          <span className="emo-mini">{u.emoji || "👤"}</span>
-                        )}
-                      </span>
-                      <span className="nm text-truncate">{u.name}</span>
-                      <span className="xp">{u.stats.weeklyXp} XP</span>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <div className="lb2-foot small">* Ranking y divisiones se reinician los domingos.</div>
+            <div className="lb2-foot small">
+              * Ranking y divisiones se reinician los domingos. Los primeros 10
+              ascienden.
+            </div>
           </div>
         </div>
 
         {/* SIDEBAR: Mejores de la app (global semanal) */}
         <div className="col-12 col-xl-4">
-          <div className="lb2-side card-stick">
+          <div className="lb2-side card-stick fade-in">
             <div className="d-flex align-items-center justify-content-between mb-2">
               <h6 className="mb-0">Mejores de la app</h6>
               <span className="lb2-muted small">Top semanal</span>
             </div>
 
-            <div className="top-list" style={{ maxHeight: "600px", overflowY: "auto" }}>
-              {topGlobal.map((u, i) => (
-                <Link key={u.id} to={`/u/${u.username}`} className="top-item">
-                  <div className="left">
-                    <div className="rank">{i + 1}</div>
-                    <div className="avatar">
-                      {u.avatar ? (
-                        <img src={u.avatar} alt={u.name} />
-                      ) : (
-                        <span className="emo">{u.emoji || "👤"}</span>
-                      )}
+            <div className="top-list">
+              {users
+                .slice()
+                .sort((a, b) => b.stats.weeklyXp - a.stats.weeklyXp)
+                .slice(0, 15)
+                .map((u, i) => (
+                  <Link
+                    key={u.id}
+                    to={`/u/${u.username}`}
+                    className={`top-item ${i < 3 ? `podium-${i + 1}` : ""}`}
+                  >
+                    <div className="left">
+                      <div className="rank">{i + 1}</div>
+                      <div className="avatar">
+                        {u.avatar ? (
+                          <img src={u.avatar} alt={u.name} />
+                        ) : (
+                          <span className="emo">{u.emoji || "👤"}</span>
+                        )}
+                      </div>
+                      <div className="meta">
+                        <div className="name text-truncate">{u.name}</div>
+                        <div className="muted small">@{u.username}</div>
+                      </div>
                     </div>
-                    <div className="meta">
-                      <div className="name text-truncate">{u.name}</div>
-                      <div className="muted small">@{u.username}</div>
+                    <div className="right">
+                      <div className="xp">{fmtXP(u.stats.weeklyXp)}</div>
                     </div>
-                  </div>
-                  <div className="right">
-                    <Stars count={starCountForRank(i)} />
-                    <div className="xp">{u.stats.weeklyXp} XP</div>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                ))}
             </div>
 
             <div className="small lb2-muted mt-2">
-              * 4★: Top 3 • 3★: Top 10 • 2★: Top 25
+              * 1.º Oro • 2.º Plata • 3.º Bronce
             </div>
           </div>
         </div>

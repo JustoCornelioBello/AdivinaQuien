@@ -229,7 +229,7 @@ export default function Profile() {
                         </div>
 
                         {/* KPIs */}
-                        <div className="row g-2 mt-3 text-white">
+                        <div className="row g-2 mt-3 ">
                             <div className="col-12 col-sm-6">
                                 <div className="stat-card">
                                     <div className="small">Nivel</div>
@@ -239,7 +239,7 @@ export default function Profile() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-12 col-sm-6 text-white">
+                            <div className="col-12 col-sm-6">
                                 <div className="stat-card">
                                     <div className="small text-white">División</div>
                                     <div className="stat-val">{me.stats.division}</div>

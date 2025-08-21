@@ -58,8 +58,8 @@ function useSoftSounds() {
  * Tiempo de juego lo medimos aquí en Home.
  */
 const BASE_QUESTS = [
-  { id: "q1", title: "Completa 1 nivel", icon: <FaPlay />,  target: 1,  reward: { xp: 30, coins: 50 },  metric: "levels" },
-  { id: "q2", title: "3 respuestas correctas", icon: <FaBolt />, target: 3,  reward: { xp: 50, coins: 80 },  metric: "correct" },
+  { id: "q1", title: "Completa 1 nivel", icon: <FaPlay />, target: 1, reward: { xp: 30, coins: 50 }, metric: "levels" },
+  { id: "q2", title: "3 respuestas correctas", icon: <FaBolt />, target: 3, reward: { xp: 50, coins: 80 }, metric: "correct" },
   { id: "q3", title: "Juega 10 minutos hoy", icon: <FaClock />, target: 10, reward: { xp: 70, coins: 120 }, metric: "minutes" },
 ];
 
@@ -163,14 +163,65 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="d-flex flex-wrap gap-2">
-                <Link to="/juegos" className="btn btn-duo btn-lg wobble text-black" onClick={click}>
+              <div
+                className="d-flex flex-wrap align-items-center gap-2"
+                style={{ fontSize: "0.8rem" }}
+              >
+                <Link
+                  to="/juegos"
+                  onClick={click}
+                  style={{
+                    background: 'linear-gradient(135deg, #1db954, #1ed760)',
+                    color: 'white',
+                    padding: '8px 14px',
+                    borderRadius: '8px',
+                    fontWeight: '600',
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    boxShadow: '0 2px 6px rgba(0,0,0,0.25)',
+                    transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "scale(1.05)";
+                    e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.35)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "scale(1)";
+                    e.currentTarget.style.boxShadow = "0 2px 6px rgba(0,0,0,0.25)";
+                  }}
+                >
                   <FaPlay className="me-2" /> Continuar (Nivel {currentLevel})
                 </Link>
-                <Link to="/clasificacion" className="btn btn-ghost btn-lg" onClick={click}>
+
+                <Link
+                  to="/clasificacion"
+                  onClick={click}
+                  style={{
+                    background: '#FFD700',
+                    color: '#191414',
+                    padding: '8px 14px',
+                    borderRadius: '8px',
+                    fontWeight: '600',
+                    textDecoration: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    boxShadow: '0 2px 6px rgba(0,0,0,0.25)',
+                    transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "scale(1.05)";
+                    e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.35)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "scale(1)";
+                    e.currentTarget.style.boxShadow = "0 2px 6px rgba(0,0,0,0.25)";
+                  }}
+                >
                   <FaTrophy className="me-2" /> Clasificación
                 </Link>
               </div>
+
             </div>
 
             {/* KPIs */}
